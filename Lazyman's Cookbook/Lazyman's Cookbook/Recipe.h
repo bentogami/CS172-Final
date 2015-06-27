@@ -11,23 +11,18 @@ using namespace std;
 class Ingredient
 {
 private:
-	string name;
-	//Amount of this ingredient
-	int amt = 0;
+	string name;	
 	//Amount of all ingredients
 	static int amount;
 
 public:	
 	Ingredient(string n) 	{
-		name = n;		
-		amt++;
-		amount++;
+		name = n;
 	}
 
 	string getName() { return name; }
-	int getAmt() { return amt; }
 	int getAmount() { return amount; }
-	void increaseAmount() { amount++; amt++; }
+	void increaseAmount() { amount++; }
 };
 
 
@@ -40,17 +35,36 @@ private:
 	static int numRecipes;
 
 public:
-	Recipe(string n, vector<Ingredient> i) {
+	Recipe(string n) {
 		name = n;
-		ingredients = i;
-		fstream manip;
-		manip.open("MasterList.txt", ios::app);	
-		manip << n << " <" << n << ".txt>" << endl;
-		manip.close();
+		
+		//Populates ingredients
+		bool e = false;
+		int ingNum = 1;		
+		cout << "Enter the ingredients.\nEnter \"end\" when done.\n";		
+		while (!e) {
+			cout << "Ingredient #" << ingNum << ": ";
+			string ing;
+			cin.clear();
+			cin >> ing;
+			if (ing == "end") {
+				e = true;
+				continue;
+			}
+			Ingredient newIng(ing);
+			ingredients.push_back(newIng);
+			ingNum++;
+		}
 		numRecipes++;
+
+		//Adds a page for this new recipe
+		addPage();
 	}
+	
+
 	string getName() { return name; }
 	int size() { return ingredients.size(); }
+	void addPage();
 };
 
 #endif
